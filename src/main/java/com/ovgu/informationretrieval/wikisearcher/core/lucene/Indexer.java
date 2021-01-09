@@ -1,11 +1,11 @@
 package com.ovgu.informationretrieval.wikisearcher.core.lucene;
 
 import com.ovgu.informationretrieval.wikisearcher.core.model.WikiDocument;
-import org.apache.lucene.analysis.custom.CustomAnalyzer;
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.LongPoint;
+import org.apache.lucene.document.StoredField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -27,14 +27,13 @@ public class Indexer {
 	List<WikiDocument> documentList;
 
 	public void index() throws IOException {
-		System.out.println("Indexing " + documentList.size() + " documents");
-
 		EnglishAnalyzer analyzer = Constants.getAnalyzer();
 
 		File folder = new File(Constants.indexDir);
 		if (folder.exists()) {
-			folder.delete();
+			FileUtils.cleanDirectory(folder);
 		}
+		System.out.println("Indexing " + documentList.size() + " documents");
 		Directory directory;
 		try {
 			directory = FSDirectory.open(Paths.get(Constants.indexDir));
@@ -58,7 +57,7 @@ public class Indexer {
 	private static Document addWikiDocument(WikiDocument wiki) {
 		Document doc = new Document();
 
-		doc.add(new LongPoint(Constants.id, wiki.getId()));
+		doc.add(new StoredField(Constants.id, wiki.getId()));
 		doc.add(new TextField(Constants.title, wiki.getDocTitle(), Field.Store.YES));
 		doc.add(new TextField(Constants.summary, wiki.getSummary(), Field.Store.YES));
 		doc.add(new TextField(Constants.imageURL, wiki.getImageURL(), Field.Store.YES));
