@@ -14,6 +14,8 @@ public class WikiDocument {
 
 	private Float score;
 
+	private String[] fragments;
+
 	public WikiDocument(){
 	}
 
@@ -65,35 +67,8 @@ public class WikiDocument {
 
 	public void setScore(Float score) { this.score = score; }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.docTitle == null) ? 0 : this.docTitle.hashCode());
-		result = prime * result + ((this.summary == null) ? 0 : this.summary.hashCode());
-		return result;
-	}
+	public String[] getFragments() { return fragments; }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (this.getClass() != obj.getClass())
-			return false;
-		WikiDocument other = (WikiDocument) obj;
-		if (this.docTitle == null) {
-			if (other.docTitle != null)
-				return false;
-		} else if (!this.docTitle.equals(other.docTitle))
-			return false;
-		if (this.summary == null) {
-			if (other.summary != null)
-				return false;
-		} else if (!this.summary.equals(other.summary))
-			return false;
-		return true;
-	}
+	public void setFragments(String[] fragments) { this.fragments = fragments; }
 
 }

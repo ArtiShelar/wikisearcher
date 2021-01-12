@@ -54,6 +54,13 @@
 			<version>7.4.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-highlighter -->
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-highlighter</artifactId>
+			<version>7.4.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
