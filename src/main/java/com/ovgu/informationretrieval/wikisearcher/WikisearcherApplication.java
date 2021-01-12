@@ -18,6 +18,7 @@ public class WikisearcherApplication {
 			Indexer indexer = configurableApplicationContext.getBean(Indexer.class);
 			indexer.index();
 		} catch (IOException e) { e.printStackTrace(); }
+		System.out.println("Application Started");
 	}
 
 }
