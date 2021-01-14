@@ -31,20 +31,23 @@ public class Searcher {
 
 		String[] searchfields = {Constants.title, Constants.content};
 
+		IndexSearcher isearcher;
+
 		EnglishAnalyzer analyzer = Constants.getAnalyzer();
 		Directory directory;
 		try {
 			directory = FSDirectory.open(Paths.get(Constants.indexDir));
 			IndexReader ireader = DirectoryReader.open(directory);
-			IndexSearcher isearcher = new IndexSearcher(ireader);
+			isearcher = new IndexSearcher(ireader);
 			isearcher.setSimilarity(new BM25Similarity());
 
 			QueryParser parser = new MultiFieldQueryParser(searchfields, analyzer);
 			Query query = parser.parse(q);
 
-			TopDocs topdocs = isearcher.search(query, Constants.max_results);
+			MyScoreQuery scoreQuery = new MyScoreQuery(query);
+			TopDocs topdocs = isearcher.search(scoreQuery, Constants.max_results);
 
-			docs = processResults(topdocs, isearcher, query, ireader, analyzer);
+			docs = processResults(topdocs, isearcher, scoreQuery, ireader, analyzer);
 
 			ireader.close();
 			directory.close();
@@ -54,6 +57,7 @@ public class Searcher {
 		return docs;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static List<WikiDocument> processResults(TopDocs hits, IndexSearcher isearcher, Query query, IndexReader reader, EnglishAnalyzer analyzer) throws IOException, InvalidTokenOffsetsException {
 		List<WikiDocument> docs = new ArrayList<>();
 
@@ -73,11 +77,12 @@ public class Searcher {
 			String content = hitDoc.get(Constants.content);
 			String summary = hitDoc.get(Constants.summary);
 			String imageURL = hitDoc.get(Constants.imageURL);
+			String relevancy = hitDoc.get(Constants.relevancy);
 
-			TokenStream tokenStream = TokenSources.getAnyTokenStream(reader, scoreDoc.doc, "content", analyzer);
+			TokenStream tokenStream = TokenSources.getAnyTokenStream(reader, scoreDoc.doc, Constants.content, analyzer);
 			String[] fragments = highlighter.getBestFragments(tokenStream, content, 10000);
 
-			WikiDocument document = new WikiDocument(Long.parseLong(id), content, title, imageURL, summary);
+			WikiDocument document = new WikiDocument(Long.parseLong(id), content, title, imageURL, summary, relevancy);
 			document.setScore(scoreDoc.score);
 			document.setFragments(fragments);
 

@@ -38,11 +38,11 @@ public class DocumentService implements GenericApiService {
 			for (int i = 0; i < docList.size(); i++) {
 				JSONObject record = (JSONObject) docList.get(i);
 				WikiDocument doc = new WikiDocument();
-				doc.setDocTitle((String) record.get(Constants.title));
+				doc.setTitle((String) record.get(Constants.title));
 				doc.setContent((String) record.get(Constants.content));
 				doc.setId((long) i+1);
 				doc.setSummary((String) record.get(Constants.summary));
-				doc.setImageURL((String) record.get(Constants.imageURL));
+				doc.setImage((String) record.get(Constants.imageURL));
 
 				collection.add(doc);
 			}

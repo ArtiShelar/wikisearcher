@@ -5,9 +5,8 @@ import com.ovgu.informationretrieval.wikisearcher.core.lucene.Indexer;
 import com.ovgu.informationretrieval.wikisearcher.core.lucene.Searcher;
 import com.ovgu.informationretrieval.wikisearcher.core.model.WikiDocument;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +26,12 @@ public class SearchRestController {
 	@RequestMapping("/search")
 	public List<WikiDocument> search(@RequestParam(value = "q", required = true) String query) throws IOException {
 		return Searcher.search(query);
+	}
+
+	@PostMapping(value = "/updateRelevance", consumes = {"multipart/form-data"})
+	public ResponseEntity<String> updateRelevance(@RequestPart("doc") WikiDocument doc, @RequestPart("maxScore") String maxScore) throws IOException {
+		new Indexer().updateRelevanceScoreInIndex(doc, maxScore);
+		return ResponseEntity.ok().build();
 	}
 
 	@RequestMapping("/hello")
