@@ -55,7 +55,7 @@ public class Indexer {
 	private static Document createDoc(WikiDocument wiki) {
 		Document doc = new Document();
 
-		doc.add(new StoredField(Constants.id, wiki.getId()));
+		doc.add(new TextField(Constants.id, String.valueOf(wiki.getId()), Field.Store.YES));
 		doc.add(new TextField(Constants.title, wiki.getTitle(), Field.Store.YES));
 		doc.add(new TextField(Constants.summary, wiki.getSummary(), Field.Store.YES));
 		doc.add(new TextField(Constants.imageURL, wiki.getImage(), Field.Store.YES));
@@ -67,7 +67,7 @@ public class Indexer {
 	private static Document addWikiDocument(WikiDocument wiki) {
 		Document doc = createDoc(wiki);
 
-		doc.add(new StringField(Constants.relevancy, Constants.default_score, Field.Store.YES));
+		doc.add(new TextField(Constants.relevancy, Constants.default_score, Field.Store.YES));
 		return doc;
 	}
 
@@ -76,7 +76,7 @@ public class Indexer {
 
 		float relevancy = Float.parseFloat(wiki.getRelevancy()) + Float.parseFloat(maxScore);
 
-		doc.add(new StringField(Constants.relevancy, String.valueOf(relevancy), Field.Store.YES));
+		doc.add(new TextField(Constants.relevancy, String.valueOf(relevancy), Field.Store.YES));
 
 		EnglishAnalyzer analyzer = Constants.getAnalyzer();
 		Directory directory;
