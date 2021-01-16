@@ -74,9 +74,9 @@ public class Indexer {
 	public void updateRelevanceScoreInIndex(WikiDocument wiki, String maxScore) throws IOException {
 		Document doc = createDoc(wiki);
 
-		float relevancy = Float.parseFloat(wiki.getRelevancy()) + Float.parseFloat(maxScore);
+		//float relevancy = Float.parseFloat(wiki.getRelevancy()) + Float.parseFloat(maxScore);
 
-		doc.add(new TextField(Constants.relevancy, String.valueOf(relevancy), Field.Store.YES));
+		doc.add(new TextField(Constants.relevancy, String.valueOf(maxScore), Field.Store.YES));
 
 		EnglishAnalyzer analyzer = Constants.getAnalyzer();
 		Directory directory;
