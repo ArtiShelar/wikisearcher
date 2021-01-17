@@ -54,6 +54,6 @@ if __name__ == '__main__':
                 except:
                     print(title, "had unknown errors")
             if(val_topic > max_topics):
-                with open("document_collection.json", "w") as text_file:
+                with open("/src/main/resources/static/document_collection.json", "w") as text_file:
                      json.dump(data_dump, text_file)
                 break
